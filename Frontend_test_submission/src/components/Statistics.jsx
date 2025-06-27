@@ -44,6 +44,7 @@ import {
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import urlStorage from "../utils/urlStorage";
+import { LogInfo, LogError, LogWarn, LogDebug } from "../utils/logger";
 import "./Statistics.css";
 
 const Statistics = () => {
@@ -54,13 +55,33 @@ const Statistics = () => {
   const [statsDialog, setStatsDialog] = useState({ open: false, stats: null });
 
   useEffect(() => {
+    LogInfo("frontend", "component", "Statistics component initialized").catch(
+      () => {}
+    );
     loadUrls();
     // Clean up expired URLs
-    urlStorage.clearExpiredUrls();
+    const expiredCount = urlStorage.clearExpiredUrls();
+    if (expiredCount > 0) {
+      LogInfo(
+        "frontend",
+        "component",
+        `Cleaned up ${expiredCount} expired URLs`
+      ).catch(() => {});
+    }
   }, []);
 
   const loadUrls = () => {
+    LogDebug(
+      "frontend",
+      "component",
+      "Loading URLs for statistics display"
+    ).catch(() => {});
     const allUrls = urlStorage.getAllUrls();
+    LogInfo(
+      "frontend",
+      "component",
+      `Loaded ${allUrls.length} URLs for statistics`
+    ).catch(() => {});
     setUrls(allUrls);
   };
 
@@ -93,7 +114,25 @@ const Statistics = () => {
 
   const confirmDelete = () => {
     if (deleteDialog.url) {
-      urlStorage.deleteUrl(deleteDialog.url.shortcode);
+      LogInfo(
+        "frontend",
+        "component",
+        `Deleting URL with shortcode: ${deleteDialog.url.shortcode}`
+      ).catch(() => {});
+      const deleted = urlStorage.deleteUrl(deleteDialog.url.shortcode);
+      if (deleted) {
+        LogInfo(
+          "frontend",
+          "component",
+          `Successfully deleted URL: ${deleteDialog.url.shortcode}`
+        ).catch(() => {});
+      } else {
+        LogError(
+          "frontend",
+          "component",
+          `Failed to delete URL: ${deleteDialog.url.shortcode}`
+        ).catch(() => {});
+      }
       loadUrls();
       setDeleteDialog({ open: false, url: null });
     }
@@ -106,9 +145,23 @@ const Statistics = () => {
 
   const copyToClipboard = async (text) => {
     try {
+      LogDebug(
+        "frontend",
+        "component",
+        `Copying text to clipboard: ${text}`
+      ).catch(() => {});
       await navigator.clipboard.writeText(text);
+      LogInfo(
+        "frontend",
+        "component",
+        "Text successfully copied to clipboard"
+      ).catch(() => {});
     } catch (err) {
-      console.error("Failed to copy text: ", err);
+      LogError(
+        "frontend",
+        "component",
+        `Failed to copy text to clipboard: ${err.message}`
+      ).catch(() => {});
     }
   };
 

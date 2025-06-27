@@ -15,6 +15,7 @@ import {
   Schedule as ScheduleIcon,
 } from "@mui/icons-material";
 import urlStorage from "../utils/urlStorage";
+import { LogInfo, LogError, LogWarn, LogDebug } from "../utils/logger";
 
 const RedirectHandler = () => {
   const { shortcode } = useParams();
@@ -42,7 +43,18 @@ const RedirectHandler = () => {
 
   const handleRedirect = async () => {
     try {
+      LogInfo(
+        "frontend",
+        "page",
+        `Processing redirect for shortcode: ${shortcode}`
+      ).catch(() => {});
+
       if (!shortcode) {
+        LogError(
+          "frontend",
+          "page",
+          "No shortcode provided for redirect"
+        ).catch(() => {});
         setError("Invalid shortcode");
         setLoading(false);
         return;
@@ -78,7 +90,11 @@ const RedirectHandler = () => {
       setUrlData(urlData);
       setLoading(false);
     } catch (error) {
-      console.error("Redirect error:", error);
+      LogError(
+        "frontend",
+        "page",
+        `Redirect processing error for ${shortcode}: ${error.message}`
+      ).catch(() => {});
       setError("An error occurred while processing the redirect");
       setLoading(false);
     }

@@ -107,6 +107,11 @@ const URLShortener = () => {
 
   const addForm = () => {
     if (urlForms.length < 5) {
+      LogInfo(
+        "frontend",
+        "component",
+        `Adding new URL form. Current count: ${urlForms.length}`
+      ).catch(() => {});
       const newId = Math.max(...urlForms.map((f) => f.id)) + 1;
       setUrlForms((prev) => [
         ...prev,
@@ -121,20 +126,50 @@ const URLShortener = () => {
           isSubmitted: false,
         },
       ]);
+    } else {
+      LogWarn(
+        "frontend",
+        "component",
+        "Attempted to add form but maximum limit (5) reached"
+      ).catch(() => {});
     }
   };
 
   const removeForm = (id) => {
     if (urlForms.length > 1) {
+      LogInfo(
+        "frontend",
+        "component",
+        `Removing URL form with ID: ${id}`
+      ).catch(() => {});
       setUrlForms((prev) => prev.filter((form) => form.id !== id));
+    } else {
+      LogWarn(
+        "frontend",
+        "component",
+        "Attempted to remove form but minimum (1) required"
+      ).catch(() => {});
     }
   };
 
   const shortenUrl = async (id) => {
     const form = urlForms.find((f) => f.id === id);
+    LogInfo(
+      "frontend",
+      "component",
+      `Attempting to shorten URL for form ID: ${id}, URL: ${form.originalUrl}`
+    ).catch(() => {});
+
     const errors = validateForm(form);
 
     if (Object.keys(errors).length > 0) {
+      LogWarn(
+        "frontend",
+        "component",
+        `Validation failed for form ID: ${id}, errors: ${JSON.stringify(
+          errors
+        )}`
+      ).catch(() => {});
       setUrlForms((prev) =>
         prev.map((f) => (f.id === id ? { ...f, errors, isSubmitted: true } : f))
       );
@@ -142,11 +177,27 @@ const URLShortener = () => {
     }
 
     try {
+      LogDebug(
+        "frontend",
+        "component",
+        `Creating short URL with parameters: URL=${
+          form.originalUrl
+        }, shortcode=${form.customShortcode || "auto"}, validity=${
+          form.validityPeriod
+        } minutes`
+      ).catch(() => {});
+
       const result = urlStorage.createShortUrl(
         form.originalUrl,
         form.customShortcode || null,
         parseInt(form.validityPeriod)
       );
+
+      LogInfo(
+        "frontend",
+        "component",
+        `URL successfully shortened: ${result.shortUrl}`
+      ).catch(() => {});
 
       setUrlForms((prev) =>
         prev.map((f) =>
@@ -164,6 +215,11 @@ const URLShortener = () => {
 
       showSnackbar("URL shortened successfully!", "success");
     } catch (error) {
+      LogError(
+        "frontend",
+        "component",
+        `Failed to shorten URL for form ID: ${id}, error: ${error.message}`
+      ).catch(() => {});
       const newErrors = { customShortcode: error.message };
       setUrlForms((prev) =>
         prev.map((f) =>
@@ -176,10 +232,24 @@ const URLShortener = () => {
 
   const copyToClipboard = async (text) => {
     try {
+      LogDebug(
+        "frontend",
+        "component",
+        `Attempting to copy text to clipboard: ${text}`
+      ).catch(() => {});
       await navigator.clipboard.writeText(text);
+      LogInfo(
+        "frontend",
+        "component",
+        "Text successfully copied to clipboard"
+      ).catch(() => {});
       showSnackbar("Copied to clipboard!", "success");
     } catch (err) {
-      console.error("Failed to copy text: ", err);
+      LogError(
+        "frontend",
+        "component",
+        `Failed to copy text to clipboard: ${err.message}`
+      ).catch(() => {});
       showSnackbar("Failed to copy text", "error");
     }
   };

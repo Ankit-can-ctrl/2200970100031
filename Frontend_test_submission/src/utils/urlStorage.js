@@ -1,8 +1,11 @@
+import { LogInfo, LogError, LogWarn, LogDebug } from "./logger.js";
+
 // URL Storage and Management System
 class URLStorage {
   constructor() {
     this.storageKey = "urlShortenerData";
     this.data = this.loadData();
+    LogInfo("frontend", "state", "URLStorage initialized").catch(() => {});
   }
 
   loadData() {
@@ -20,7 +23,11 @@ class URLStorage {
       data.shortcodes = new Set(data.shortcodes || []);
       return data;
     } catch (error) {
-      console.error("Error loading data:", error);
+      LogError(
+        "frontend",
+        "state",
+        `Error loading URLStorage data: ${error.message}`
+      ).catch(() => {});
       return {
         urls: {},
         clicks: {},
@@ -37,7 +44,11 @@ class URLStorage {
       };
       localStorage.setItem(this.storageKey, JSON.stringify(dataToSave));
     } catch (error) {
-      console.error("Error saving data:", error);
+      LogError(
+        "frontend",
+        "state",
+        `Error saving URLStorage data: ${error.message}`
+      ).catch(() => {});
     }
   }
 
@@ -87,26 +98,59 @@ class URLStorage {
   }
 
   createShortUrl(originalUrl, customShortcode = null, validityMinutes = 30) {
+    LogDebug(
+      "frontend",
+      "state",
+      `Creating short URL for: ${originalUrl}, custom shortcode: ${
+        customShortcode || "auto"
+      }, validity: ${validityMinutes} minutes`
+    ).catch(() => {});
+
     const urlValidation = this.validateUrl(originalUrl);
     if (!urlValidation.isValid) {
+      LogError(
+        "frontend",
+        "state",
+        `Invalid URL format provided: ${originalUrl}`
+      ).catch(() => {});
       throw new Error("Invalid URL format");
     }
 
     let shortcode;
     if (customShortcode) {
       if (!this.validateShortcode(customShortcode)) {
+        LogError(
+          "frontend",
+          "state",
+          `Invalid shortcode format: ${customShortcode}`
+        ).catch(() => {});
         throw new Error(
           "Invalid shortcode format. Use 3-20 alphanumeric characters, hyphens, or underscores."
         );
       }
       if (this.isShortcodeExists(customShortcode)) {
+        LogError(
+          "frontend",
+          "state",
+          `Shortcode already exists: ${customShortcode}`
+        ).catch(() => {});
         throw new Error(
           "Shortcode already exists. Please choose a different one."
         );
       }
       shortcode = customShortcode;
+      LogInfo(
+        "frontend",
+        "state",
+        `Using custom shortcode: ${shortcode}`
+      ).catch(() => {});
     } else {
       shortcode = this.generateUniqueShortcode();
+      LogInfo(
+        "frontend",
+        "state",
+        `Generated auto shortcode: ${shortcode}`
+      ).catch(() => {});
     }
 
     const now = new Date();
@@ -127,6 +171,12 @@ class URLStorage {
     this.data.shortcodes.add(shortcode);
     this.data.clicks[shortcode] = [];
     this.saveData();
+
+    LogInfo(
+      "frontend",
+      "state",
+      `Successfully created short URL: http://localhost:3000/${shortcode}`
+    ).catch(() => {});
 
     return {
       ...urlData,
