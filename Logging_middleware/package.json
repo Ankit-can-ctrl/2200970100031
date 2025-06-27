@@ -1,0 +1,20 @@
+{
+  "name": "url-shortener-logging-middleware",
+  "version": "1.0.0",
+  "description": "Reusable logging middleware for URL Shortener application",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "logging",
+    "middleware",
+    "api"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.6.2"
+  }
+}

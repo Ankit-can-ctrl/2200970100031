@@ -26,6 +26,7 @@ import {
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import urlStorage from "../utils/urlStorage";
+import { LogInfo, LogError, LogWarn, LogDebug } from "../utils/logger";
 import "./URLShortener.css";
 
 const URLShortener = () => {
@@ -47,6 +48,15 @@ const URLShortener = () => {
     message: "",
     type: "success",
   });
+
+  // Log component initialization
+  React.useEffect(() => {
+    LogInfo(
+      "frontend",
+      "component",
+      "URLShortener component initialized"
+    ).catch(() => {});
+  }, []);
 
   const validateForm = (form) => {
     const errors = {};
