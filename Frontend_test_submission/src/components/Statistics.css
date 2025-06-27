@@ -1,0 +1,197 @@
+.statistics-container {
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  min-height: 100vh;
+  padding: 0 !important;
+  max-width: 100% !important;
+}
+
+.statistics-container > div {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  margin: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.app-bar {
+  background: linear-gradient(45deg, #667eea, #764ba2) !important;
+  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3) !important;
+}
+
+.main-title {
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+}
+
+/* Table styling */
+.MuiTableContainer-root {
+  border-radius: 12px !important;
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.1) !important;
+}
+
+.MuiTableHead-root {
+  background: linear-gradient(
+    45deg,
+    rgba(102, 126, 234, 0.1),
+    rgba(118, 75, 162, 0.1)
+  ) !important;
+}
+
+.MuiTableHead-root .MuiTableCell-root {
+  background: transparent !important;
+  border-bottom: 2px solid rgba(102, 126, 234, 0.2) !important;
+  font-weight: 600 !important;
+}
+
+.MuiTableRow-root:hover {
+  background: rgba(102, 126, 234, 0.05) !important;
+}
+
+.MuiTableCell-root {
+  border-bottom: 1px solid rgba(102, 126, 234, 0.1) !important;
+}
+
+/* Chip styling */
+.MuiChip-root {
+  font-weight: 500 !important;
+  border-radius: 16px !important;
+}
+
+.MuiChip-colorSuccess {
+  background: linear-gradient(45deg, #4caf50, #81c784) !important;
+  color: white !important;
+}
+
+.MuiChip-colorError {
+  background: linear-gradient(45deg, #f44336, #e57373) !important;
+  color: white !important;
+}
+
+/* Button styling */
+.MuiButton-contained {
+  background: linear-gradient(45deg, #667eea, #764ba2) !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  text-transform: none !important;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3) !important;
+  transition: all 0.3s ease !important;
+}
+
+.MuiButton-contained:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4) !important;
+}
+
+/* Icon button styling */
+.MuiIconButton-root {
+  transition: all 0.2s ease !important;
+}
+
+.MuiIconButton-root:hover {
+  transform: scale(1.1);
+}
+
+/* Dialog styling */
+.MuiDialog-paper {
+  border-radius: 16px !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15) !important;
+}
+
+.MuiDialogTitle-root {
+  background: linear-gradient(
+    45deg,
+    rgba(102, 126, 234, 0.1),
+    rgba(118, 75, 162, 0.1)
+  );
+  font-weight: 600 !important;
+}
+
+/* Card styling */
+.MuiCard-root {
+  border-radius: 12px !important;
+  border: 1px solid rgba(102, 126, 234, 0.1) !important;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.1) !important;
+  transition: all 0.3s ease !important;
+}
+
+.MuiCard-root:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.15) !important;
+}
+
+/* List styling */
+.MuiList-root {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.MuiListItem-root {
+  border-radius: 8px !important;
+  margin: 4px 0 !important;
+  transition: background 0.2s ease !important;
+}
+
+.MuiListItem-root:hover {
+  background: rgba(102, 126, 234, 0.05) !important;
+}
+
+/* Collapse animation */
+.MuiCollapse-root {
+  border-radius: 8px;
+  background: rgba(102, 126, 234, 0.02);
+  margin: 8px 0;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .statistics-container > div {
+    margin: 10px;
+    border-radius: 12px;
+  }
+
+  .main-title {
+    font-size: 2rem !important;
+  }
+
+  .MuiTableContainer-root {
+    border-radius: 8px !important;
+  }
+}
+
+/* Custom scrollbar */
+.MuiList-root::-webkit-scrollbar {
+  width: 6px;
+}
+
+.MuiList-root::-webkit-scrollbar-track {
+  background: rgba(102, 126, 234, 0.1);
+  border-radius: 3px;
+}
+
+.MuiList-root::-webkit-scrollbar-thumb {
+  background: rgba(102, 126, 234, 0.3);
+  border-radius: 3px;
+}
+
+.MuiList-root::-webkit-scrollbar-thumb:hover {
+  background: rgba(102, 126, 234, 0.5);
+}
+
+/* Animation for table rows */
+.MuiTableRow-root {
+  animation: slideInUp 0.3s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

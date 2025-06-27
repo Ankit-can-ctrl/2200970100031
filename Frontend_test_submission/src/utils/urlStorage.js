@@ -8,13 +8,17 @@ class URLStorage {
   loadData() {
     try {
       const stored = localStorage.getItem(this.storageKey);
-      return stored
+      const data = stored
         ? JSON.parse(stored)
         : {
             urls: {},
             clicks: {},
-            shortcodes: new Set(),
+            shortcodes: [],
           };
+
+      // Convert shortcodes array back to Set
+      data.shortcodes = new Set(data.shortcodes || []);
+      return data;
     } catch (error) {
       console.error("Error loading data:", error);
       return {
